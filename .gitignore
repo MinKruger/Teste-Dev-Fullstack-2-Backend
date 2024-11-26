@@ -1,0 +1,70 @@
+# Arquivos e pastas gerados automaticamente pelo Visual Studio
+.vs/
+.idea/
+*.user
+*.suo
+
+# Build Results
+bin/
+obj/
+
+# Logs
+*.log
+
+# Diretórios temporários
+tmp/
+temp/
+
+# Arquivos de Configuração de Ambiente
+*.env
+
+# Configurações de publicação
+*.pubxml
+*.publishsettings
+
+# Arquivos do Rider (JetBrains)
+.idea/
+
+# Arquivos gerados automaticamente do sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Pacotes gerenciados pelo NuGet
+*.nupkg
+packages/
+.nuget/
+
+# Arquivos de saída de pacotes
+*.snupkg
+
+# Arquivos gerados durante o desenvolvimento
+*.bak
+*.swp
+*.tmp
+
+# Arquivos de cache de testes
+TestResults/
+.trx
+coverage/
+
+# Arquivos do Visual Studio Code
+.vscode/
+
+# Arquivos de cache de usuário
+*.vsix
+
+# Arquivos gerados por configurações específicas de containers
+docker-compose.override.yml
+*.dockerignore
+
+# Arquivos de cache e logs do sistema
+*.log
+!*.keep
+
+# Arquivos locais de perfil de usuário
+*.prefs
+
+# Banco de dados local (opcional, se usado no projeto)
+*.db
+*.sqlite
