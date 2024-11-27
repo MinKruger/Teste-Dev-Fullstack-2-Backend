@@ -22,7 +22,7 @@ namespace Infrastructure.DependencyInjection
             // Registra o repositório com o decorator de cache
             services.AddMemoryCache();
             services.AddScoped<IClienteRepository, ClienteRepository>();
-            services.Decorate<IClienteRepository, CachedClienteRepository>();
+            //services.Decorate<IClienteRepository, CachedClienteRepository>();
 
             return services;
         }

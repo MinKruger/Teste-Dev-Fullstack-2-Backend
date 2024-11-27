@@ -15,23 +15,23 @@ namespace Infrastructure.Data.Repository
 
         public async Task<Cliente?> ObterPorIdAsync(Guid id)
         {
-            return await _dbContext.Clientes.FindAsync(id);
+            return await _dbContext.Cliente.FindAsync(id);
         }
 
         public async Task<IEnumerable<Cliente>> ObterTodosAsync()
         {
-            return await _dbContext.Clientes.ToListAsync();
+            return await _dbContext.Cliente.ToListAsync();
         }
 
         public async Task AdicionarAsync(Cliente cliente)
         {
-            await _dbContext.Clientes.AddAsync(cliente);
+            await _dbContext.Cliente.AddAsync(cliente);
             await _dbContext.SaveChangesAsync();
         }
 
         public async Task AtualizarAsync(Cliente cliente)
         {
-            _dbContext.Clientes.Update(cliente);
+            _dbContext.Cliente.Update(cliente);
             await _dbContext.SaveChangesAsync();
         }
 
@@ -40,7 +40,7 @@ namespace Infrastructure.Data.Repository
             var cliente = await ObterPorIdAsync(id);
             if (cliente != null)
             {
-                _dbContext.Clientes.Remove(cliente);
+                _dbContext.Cliente.Remove(cliente);
                 await _dbContext.SaveChangesAsync();
             }
         }

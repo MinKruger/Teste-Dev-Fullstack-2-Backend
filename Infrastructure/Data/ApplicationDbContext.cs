@@ -10,7 +10,7 @@ namespace Infrastructure.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        public DbSet<Cliente> Clientes { get; set; }
+        public DbSet<Cliente> Cliente { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }
