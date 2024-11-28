@@ -2,74 +2,85 @@
 using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace API.Controllers
+[Route("api/[controller]")]
+[ApiController]
+public class VendedorController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class VendedorController : ControllerBase
+    private readonly IVendedorService _vendedorService;
+
+    public VendedorController(IVendedorService vendedorService)
     {
-        private readonly IVendedorService _vendedorService;
+        _vendedorService = vendedorService;
+    }
 
-        public VendedorController(IVendedorService vendedorService)
+    [HttpGet]
+    public async Task<IActionResult> ObterTodos()
+    {
+        var vendedores = await _vendedorService.ObterTodosAsync();
+        return Ok(vendedores);
+    }
+
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> ObterPorId(Guid id)
+    {
+        var vendedor = await _vendedorService.ObterPorIdAsync(id);
+        if (vendedor == null)
+            return NotFound("Vendedor não encontrado.");
+        return Ok(vendedor);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Adicionar([FromBody] CreateVendedorDto vendedorDto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        await _vendedorService.AdicionarAsync(vendedorDto);
+        return CreatedAtAction(nameof(ObterPorId), new { id = vendedorDto }, vendedorDto);
+    }
+
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> Atualizar(Guid id, [FromBody] UpdateVendedorDto vendedorDto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        try
         {
-            _vendedorService = vendedorService;
+            await _vendedorService.AtualizarAsync(id, vendedorDto);
+            return NoContent();
         }
-
-        [HttpGet]
-        public async Task<IActionResult> ObterTodos()
+        catch (Exception ex)
         {
-            var vendedores = await _vendedorService.ObterTodosAsync();
-            return Ok(vendedores);
+            return BadRequest(ex.Message);
         }
+    }
 
-        [HttpGet("{id:guid}")]
-        public async Task<IActionResult> ObterPorId(Guid id)
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Desativar(Guid id)
+    {
+        try
         {
-            var vendedor = await _vendedorService.ObterPorIdAsync(id);
-            if (vendedor == null)
-                return NotFound("Vendedor não encontrado.");
-            return Ok(vendedor);
+            await _vendedorService.DesativarAsync(id);
+            return NoContent();
         }
-
-        [HttpPost]
-        public async Task<IActionResult> Adicionar([FromBody] CreateVendedorDto vendedorDto)
+        catch (Exception ex)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            await _vendedorService.AdicionarAsync(vendedorDto);
-            return CreatedAtAction(nameof(ObterPorId), new { id = vendedorDto }, vendedorDto);
+            return BadRequest(ex.Message);
         }
+    }
 
-        [HttpPut("{id:guid}")]
-        public async Task<IActionResult> Atualizar(Guid id, [FromBody] UpdateVendedorDto vendedorDto)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+    [HttpGet("VendasNoPeriodo")]
+    public async Task<IActionResult> VendasNoPeriodo([FromQuery] DateTime inicio, [FromQuery] DateTime fim)
+    {
+        var totalVendas = await _vendedorService.ObterTotalVendasNoPeriodoAsync(inicio, fim);
+        return Ok(totalVendas);
+    }
 
-            try
-            {
-                await _vendedorService.AtualizarAsync(id, vendedorDto);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> Remover(Guid id)
-        {
-            try
-            {
-                await _vendedorService.RemoverAsync(id);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+    [HttpGet("MelhorCliente")]
+    public async Task<IActionResult> MelhorCliente()
+    {
+        var cliente = await _vendedorService.ObterMelhorClienteAsync();
+        return Ok(cliente);
     }
 }

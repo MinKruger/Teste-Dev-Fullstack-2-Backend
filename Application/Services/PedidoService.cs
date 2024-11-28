@@ -9,11 +9,15 @@ namespace Application.Services
     public class PedidoService : IPedidoService
     {
         private readonly IPedidoRepository _pedidoRepository;
+        private readonly IClienteRepository _clienteRepository;
+        private readonly IVendedorRepository _vendedorRepository;
         private readonly IMapper _mapper;
 
-        public PedidoService(IPedidoRepository pedidoRepository, IMapper mapper)
+        public PedidoService(IPedidoRepository pedidoRepository, IClienteRepository clienteRepository, IVendedorRepository vendedorRepository, IMapper mapper)
         {
             _pedidoRepository = pedidoRepository;
+            _clienteRepository = clienteRepository;
+            _vendedorRepository = vendedorRepository;
             _mapper = mapper;
         }
 
@@ -31,6 +35,15 @@ namespace Application.Services
 
         public async Task AdicionarAsync(CreatePedidoDto pedidoDto)
         {
+            var cliente = await _clienteRepository.ObterPorIdAsync(pedidoDto.ClienteId);
+            var vendedor = await _vendedorRepository.ObterPorIdAsync(pedidoDto.VendedorId);
+
+            if (cliente == null || !cliente.Ativo)
+                throw new Exception("Cliente inativo ou não encontrado.");
+
+            if (vendedor == null || !vendedor.Ativo)
+                throw new Exception("Vendedor inativo ou não encontrado.");
+
             var pedido = _mapper.Map<Pedido>(pedidoDto);
             await _pedidoRepository.AdicionarAsync(pedido);
         }
@@ -47,8 +60,15 @@ namespace Application.Services
             await _pedidoRepository.AtualizarAsync(pedido);
         }
 
-        public async Task RemoverAsync(Guid id)
+        public async Task ExcluirAsync(Guid id)
         {
+            var pedido = await _pedidoRepository.ObterPorIdAsync(id);
+            if (pedido == null)
+                throw new Exception("Pedido não encontrado.");
+
+            if (pedido.Autorizado)
+                throw new Exception("Não é possível excluir um pedido autorizado.");
+
             await _pedidoRepository.RemoverAsync(id);
         }
     }

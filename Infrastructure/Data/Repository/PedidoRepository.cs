@@ -20,8 +20,8 @@ namespace Infrastructure.Data.Repositories
         public async Task<Pedido?> ObterPorIdAsync(Guid id)
         {
             return await _context.Pedido
-                .Include(p => p.Cliente)  // Inclui dados relacionados de Cliente
-                .Include(p => p.Vendedor) // Inclui dados relacionados de Vendedor
+                .Include(p => p.Cliente)
+                .Include(p => p.Vendedor)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
@@ -48,11 +48,32 @@ namespace Infrastructure.Data.Repositories
         public async Task RemoverAsync(Guid id)
         {
             var pedido = await ObterPorIdAsync(id);
-            if (pedido == null)
-                throw new ArgumentException("Pedido não encontrado.");
+            if (pedido != null)
+            {
+                _context.Pedido.Remove(pedido);
+                await _context.SaveChangesAsync();
+            }
+        }
 
-            _context.Pedido.Remove(pedido);
-            await _context.SaveChangesAsync();
+        public async Task<decimal> ObterTotalVendasPorVendedoresNoPeriodoAsync(DateTime inicio, DateTime fim)
+        {
+            return await _context.Pedido
+                .Where(p => p.DataCriacao >= inicio && p.DataCriacao <= fim)
+                .SumAsync(p => p.ValorTotal);
+        }
+
+        public async Task<Cliente?> ObterMelhorClienteAsync()
+        {
+            var clienteId = await _context.Pedido
+                .GroupBy(p => p.ClienteId)
+                .OrderByDescending(g => g.Sum(p => p.ValorTotal))
+                .Select(g => g.Key)
+                .FirstOrDefaultAsync();
+
+            if (clienteId == null)
+                return null;
+
+            return await _context.Cliente.FindAsync(clienteId);
         }
     }
 }

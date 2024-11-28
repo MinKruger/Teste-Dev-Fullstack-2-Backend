@@ -12,5 +12,7 @@ namespace Domain.Repository
         Task AdicionarAsync(Pedido pedido);
         Task AtualizarAsync(Pedido pedido);
         Task RemoverAsync(Guid id);
+        Task<decimal> ObterTotalVendasPorVendedoresNoPeriodoAsync(DateTime inicio, DateTime fim);
+        Task<Cliente?> ObterMelhorClienteAsync();
     }
 }

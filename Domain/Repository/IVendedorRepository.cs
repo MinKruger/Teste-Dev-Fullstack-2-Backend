@@ -11,6 +11,6 @@ namespace Domain.Repository
         Task<IEnumerable<Vendedor>> ObterTodosAsync();
         Task AdicionarAsync(Vendedor vendedor);
         Task AtualizarAsync(Vendedor vendedor);
-        Task RemoverAsync(Guid id);
+        Task DesativarAsync(Guid id);
     }
 }

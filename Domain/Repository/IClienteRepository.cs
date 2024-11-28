@@ -1,8 +1,5 @@
 ﻿using Domain.Entities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Domain.Repository
@@ -13,6 +10,7 @@ namespace Domain.Repository
         Task<IEnumerable<Cliente>> ObterTodosAsync();
         Task AdicionarAsync(Cliente cliente);
         Task AtualizarAsync(Cliente cliente);
-        Task RemoverAsync(Guid id);
+        Task DesativarAsync(Guid id);
+        Task<decimal> ObterTotalComprasNoPeriodoAsync(DateTime inicio, DateTime fim);
     }
 }

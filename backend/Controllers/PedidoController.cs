@@ -2,74 +2,78 @@
 using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace API.Controllers
+[Route("api/[controller]")]
+[ApiController]
+public class PedidoController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class PedidoController : ControllerBase
+    private readonly IPedidoService _pedidoService;
+
+    public PedidoController(IPedidoService pedidoService)
     {
-        private readonly IPedidoService _pedidoService;
+        _pedidoService = pedidoService;
+    }
 
-        public PedidoController(IPedidoService pedidoService)
+    [HttpGet]
+    public async Task<IActionResult> ObterTodos()
+    {
+        var pedidos = await _pedidoService.ObterTodosAsync();
+        return Ok(pedidos);
+    }
+
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> ObterPorId(Guid id)
+    {
+        var pedido = await _pedidoService.ObterPorIdAsync(id);
+        if (pedido == null)
+            return NotFound("Pedido não encontrado.");
+        return Ok(pedido);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Adicionar([FromBody] CreatePedidoDto pedidoDto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        try
         {
-            _pedidoService = pedidoService;
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> ObterTodos()
-        {
-            var pedidos = await _pedidoService.ObterTodosAsync();
-            return Ok(pedidos);
-        }
-
-        [HttpGet("{id:guid}")]
-        public async Task<IActionResult> ObterPorId(Guid id)
-        {
-            var pedido = await _pedidoService.ObterPorIdAsync(id);
-            if (pedido == null)
-                return NotFound("Pedido não encontrado.");
-            return Ok(pedido);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Adicionar([FromBody] CreatePedidoDto pedidoDto)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             await _pedidoService.AdicionarAsync(pedidoDto);
-            return CreatedAtAction(nameof(ObterPorId), new { id = pedidoDto }, pedidoDto);
+            return Created("Pedido criado com sucesso.", null);
         }
-
-        [HttpPut("{id:guid}")]
-        public async Task<IActionResult> Atualizar(Guid id, [FromBody] UpdatePedidoDto pedidoDto)
+        catch (Exception ex)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            try
-            {
-                await _pedidoService.AtualizarAsync(id, pedidoDto);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return BadRequest(ex.Message);
         }
+    }
 
-        [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> Remover(Guid id)
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> Atualizar(Guid id, [FromBody] UpdatePedidoDto pedidoDto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        try
         {
-            try
-            {
-                await _pedidoService.RemoverAsync(id);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            await _pedidoService.AtualizarAsync(id, pedidoDto);
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Excluir(Guid id)
+    {
+        try
+        {
+            await _pedidoService.ExcluirAsync(id);
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
         }
     }
 }

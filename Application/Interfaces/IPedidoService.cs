@@ -11,6 +11,6 @@ namespace Application.Interfaces
         Task<PedidoDto?> ObterPorIdAsync(Guid id);
         Task AdicionarAsync(CreatePedidoDto pedidoDto);
         Task AtualizarAsync(Guid id, UpdatePedidoDto pedidoDto);
-        Task RemoverAsync(Guid id);
+        Task ExcluirAsync(Guid id);
     }
 }

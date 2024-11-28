@@ -3,11 +3,6 @@ using Application.Interfaces;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services
 {
@@ -15,11 +10,13 @@ namespace Application.Services
     {
         private readonly IClienteRepository _clienteRepository;
         private readonly IMapper _mapper;
+        private readonly ExternalApiService _externalApiService;
 
-        public ClienteService(IClienteRepository clienteRepository, IMapper mapper)
+        public ClienteService(IClienteRepository clienteRepository, IMapper mapper, ExternalApiService externalApiService)
         {
             _clienteRepository = clienteRepository;
             _mapper = mapper;
+            _externalApiService = externalApiService;
         }
 
         public async Task<IEnumerable<ClienteDto>> ObterTodosAsync()
@@ -31,12 +28,14 @@ namespace Application.Services
         public async Task<ClienteDto?> ObterPorIdAsync(Guid id)
         {
             var cliente = await _clienteRepository.ObterPorIdAsync(id);
-            return cliente == null ? null : _mapper.Map<ClienteDto>(cliente);
+            return _mapper.Map<ClienteDto?>(cliente);
         }
 
-        public async Task AdicionarAsync(CreateClienteDto clienteDto)
+        public async Task AdicionarPorCnpjAsync(string cnpj)
         {
-            var cliente = _mapper.Map<Cliente>(clienteDto);
+            // Lógica para consumir API externa para buscar dados pelo CNPJ
+            var dadosCliente = await _externalApiService.ObterDadosPorCnpjAsync(cnpj);
+            var cliente = _mapper.Map<Cliente>(dadosCliente);
             await _clienteRepository.AdicionarAsync(cliente);
         }
 
@@ -44,29 +43,29 @@ namespace Application.Services
         {
             var cliente = await _clienteRepository.ObterPorIdAsync(id);
             if (cliente == null)
-                throw new KeyNotFoundException("Cliente não encontrado.");
+            {
+                throw new Exception("Cliente não encontrado.");
+            }
 
-            // Atualiza os dados
-            cliente.SetRazaoSocial(clienteDto.RazaoSocial ?? "");
-            cliente.SetNomeFantasia(clienteDto.NomeFantasia ?? "");
-            cliente.SetLogradouro(clienteDto.Logradouro ?? "");
-            cliente.SetBairro(clienteDto.Bairro ?? "");
-            cliente.SetCidade(clienteDto.Cidade ?? "");
-            cliente.SetEstado(clienteDto.Estado ?? "");
-            if (clienteDto.Ativo) cliente.Ativar();
-            else cliente.Desativar();
-
+            _mapper.Map(clienteDto, cliente);
             await _clienteRepository.AtualizarAsync(cliente);
         }
 
-        public async Task RemoverAsync(Guid id)
+        public async Task DesativarAsync(Guid id)
         {
-            await _clienteRepository.RemoverAsync(id);
+            var cliente = await _clienteRepository.ObterPorIdAsync(id);
+            if (cliente == null)
+            {
+                throw new Exception("Cliente não encontrado.");
+            }
+
+            cliente.Desativar();
+            await _clienteRepository.AtualizarAsync(cliente);
         }
 
-        //public async Task<decimal> ComprasNoPeriodoAsync(Guid clienteId, DateTime inicio, DateTime fim)
-        //{
-        //    return await _clienteRepository.ComprasNoPeriodoAsync(clienteId, inicio, fim);
-        //}
+        public async Task<decimal> ObterTotalComprasNoPeriodoAsync(DateTime inicio, DateTime fim)
+        {
+            return await _clienteRepository.ObterTotalComprasNoPeriodoAsync(inicio, fim);
+        }
     }
 }

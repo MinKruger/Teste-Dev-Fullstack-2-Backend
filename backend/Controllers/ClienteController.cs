@@ -2,80 +2,85 @@
 using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace API.Controllers
+[Route("api/[controller]")]
+[ApiController]
+public class ClienteController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ClienteController : ControllerBase
+    private readonly IClienteService _clienteService;
+
+    public ClienteController(IClienteService clienteService)
     {
-        private readonly IClienteService _clienteService;
+        _clienteService = clienteService;
+    }
 
-        public ClienteController(IClienteService clienteService)
+    [HttpGet]
+    public async Task<IActionResult> ObterTodos()
+    {
+        var clientes = await _clienteService.ObterTodosAsync();
+        return Ok(clientes);
+    }
+
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> ObterPorId(Guid id)
+    {
+        var cliente = await _clienteService.ObterPorIdAsync(id);
+        if (cliente == null)
+            return NotFound("Cliente não encontrado.");
+        return Ok(cliente);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Adicionar([FromBody] string cnpj)
+    {
+        if (string.IsNullOrEmpty(cnpj))
+            return BadRequest("CNPJ é obrigatório.");
+
+        try
         {
-            _clienteService = clienteService;
+            await _clienteService.AdicionarPorCnpjAsync(cnpj);
+            return Created("Cliente criado com sucesso.", null);
         }
-
-        // GET: api/Cliente
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+        catch (Exception ex)
         {
-            var clientes = await _clienteService.ObterTodosAsync();
-            return Ok(clientes);
+            return BadRequest(ex.Message);
         }
+    }
 
-        // GET: api/Cliente/{id}
-        [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetById(Guid id)
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> Atualizar(Guid id, [FromBody] UpdateClienteDto clienteDto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        try
         {
-            var cliente = await _clienteService.ObterPorIdAsync(id);
-            if (cliente == null)
-                return NotFound();
-
-            return Ok(cliente);
+            await _clienteService.AtualizarAsync(id, clienteDto);
+            return NoContent();
         }
-
-        // POST: api/Cliente
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateClienteDto clienteDto)
+        catch (Exception ex)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            await _clienteService.AdicionarAsync(clienteDto);
-            return CreatedAtAction(nameof(GetById), new { id = clienteDto }, clienteDto);
+            return BadRequest(ex.Message);
         }
+    }
 
-        // PUT: api/Cliente/{id}
-        [HttpPut("{id:guid}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateClienteDto clienteDto)
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Desativar(Guid id)
+    {
+        try
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            try
-            {
-                await _clienteService.AtualizarAsync(id, clienteDto);
-                return NoContent();
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
+            await _clienteService.DesativarAsync(id);
+            return NoContent();
         }
-
-        // DELETE: api/Cliente/{id}
-        [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> Delete(Guid id)
+        catch (Exception ex)
         {
-            try
-            {
-                await _clienteService.RemoverAsync(id);
-                return NoContent();
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
+            return BadRequest(ex.Message);
         }
+    }
+
+    [HttpGet("ComprasNoPeriodo")]
+    public async Task<IActionResult> ComprasNoPeriodo([FromQuery] DateTime inicio, [FromQuery] DateTime fim)
+    {
+        var totalCompras = await _clienteService.ObterTotalComprasNoPeriodoAsync(inicio, fim);
+        return Ok(totalCompras);
     }
 }

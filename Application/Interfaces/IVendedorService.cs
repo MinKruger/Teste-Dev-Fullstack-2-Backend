@@ -11,6 +11,8 @@ namespace Application.Interfaces
         Task<VendedorDto?> ObterPorIdAsync(Guid id);
         Task AdicionarAsync(CreateVendedorDto vendedorDto);
         Task AtualizarAsync(Guid id, UpdateVendedorDto vendedorDto);
-        Task RemoverAsync(Guid id);
+        Task DesativarAsync(Guid id);
+        Task<decimal> ObterTotalVendasNoPeriodoAsync(DateTime inicio, DateTime fim);
+        Task<ClienteDto?> ObterMelhorClienteAsync();
     }
 }

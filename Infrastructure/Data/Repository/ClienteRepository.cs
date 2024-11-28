@@ -1,50 +1,59 @@
 ﻿using Domain.Entities;
 using Domain.Repository;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Infrastructure.Data.Repository
+namespace Infrastructure.Data.Repositories
 {
     public class ClienteRepository : IClienteRepository
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly ApplicationDbContext _context;
 
-        public ClienteRepository(ApplicationDbContext dbContext)
+        public ClienteRepository(ApplicationDbContext context)
         {
-            _dbContext = dbContext;
+            _context = context;
         }
 
         public async Task<Cliente?> ObterPorIdAsync(Guid id)
         {
-            return await _dbContext.Cliente.FindAsync(id);
+            return await _context.Cliente.FindAsync(id);
         }
 
         public async Task<IEnumerable<Cliente>> ObterTodosAsync()
         {
-            return await _dbContext.Cliente.ToListAsync();
+            return await _context.Cliente.ToListAsync();
         }
 
         public async Task AdicionarAsync(Cliente cliente)
         {
-            await _dbContext.Cliente.AddAsync(cliente);
-            await _dbContext.SaveChangesAsync();
+            await _context.Cliente.AddAsync(cliente);
+            await _context.SaveChangesAsync();
         }
 
         public async Task AtualizarAsync(Cliente cliente)
         {
-            _dbContext.Cliente.Update(cliente);
-            await _dbContext.SaveChangesAsync();
+            _context.Cliente.Update(cliente);
+            await _context.SaveChangesAsync();
         }
 
-        public async Task RemoverAsync(Guid id)
+        public async Task DesativarAsync(Guid id)
         {
             var cliente = await ObterPorIdAsync(id);
             if (cliente != null)
             {
-                cliente.Desativar(); // Desativa o cliente
-                _dbContext.Cliente.Update(cliente); // Atualiza o cliente no banco
-                await _dbContext.SaveChangesAsync();
+                cliente.Desativar();
+                await AtualizarAsync(cliente);
             }
         }
 
+        public async Task<decimal> ObterTotalComprasNoPeriodoAsync(DateTime inicio, DateTime fim)
+        {
+            return await _context.Pedido
+                .Where(p => p.ClienteId != null && p.DataCriacao >= inicio && p.DataCriacao <= fim)
+                .SumAsync(p => p.ValorTotal);
+        }
     }
 }

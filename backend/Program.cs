@@ -3,6 +3,7 @@ using Application.Validators;
 using Infrastructure.DependencyInjection;
 using FluentValidation;
 using Application.Mappings;
+using Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,8 @@ builder.Services.AddSwaggerGen();
 // Configure services for Infra and Application layers
 builder.Services.AddInfra(builder.Configuration.GetConnectionString("DefaultConnection") ?? "");
 builder.Services.AddApplication(); // Adiciona Application
+builder.Services.AddHttpClient<ExternalApiService>();
+
 
 // Configure AutoMapper
 builder.Services.AddAutoMapper(typeof(ClienteMappingProfile), typeof(VendedorMappingProfile), typeof(PedidoMappingProfile));

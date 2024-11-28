@@ -9,11 +9,13 @@ namespace Application.Services
     public class VendedorService : IVendedorService
     {
         private readonly IVendedorRepository _vendedorRepository;
+        private readonly IPedidoRepository _pedidoRepository;
         private readonly IMapper _mapper;
 
-        public VendedorService(IVendedorRepository vendedorRepository, IMapper mapper)
+        public VendedorService(IVendedorRepository vendedorRepository, IPedidoRepository pedidoRepository, IMapper mapper)
         {
             _vendedorRepository = vendedorRepository;
+            _pedidoRepository = pedidoRepository;
             _mapper = mapper;
         }
 
@@ -47,9 +49,27 @@ namespace Application.Services
             await _vendedorRepository.AtualizarAsync(vendedor);
         }
 
-        public async Task RemoverAsync(Guid id)
+        public async Task DesativarAsync(Guid id)
         {
-            await _vendedorRepository.RemoverAsync(id);
+            var vendedor = await _vendedorRepository.ObterPorIdAsync(id);
+            if (vendedor == null)
+            {
+                throw new Exception("Vendedor não encontrado.");
+            }
+
+            vendedor.Desativar();
+            await _vendedorRepository.AtualizarAsync(vendedor);
+        }
+
+        public async Task<decimal> ObterTotalVendasNoPeriodoAsync(DateTime inicio, DateTime fim)
+        {
+            return await _pedidoRepository.ObterTotalVendasPorVendedoresNoPeriodoAsync(inicio, fim);
+        }
+
+        public async Task<ClienteDto?> ObterMelhorClienteAsync()
+        {
+            var melhorCliente = await _pedidoRepository.ObterMelhorClienteAsync();
+            return _mapper.Map<ClienteDto?>(melhorCliente);
         }
     }
 }

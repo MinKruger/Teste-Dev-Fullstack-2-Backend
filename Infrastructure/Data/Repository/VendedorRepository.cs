@@ -38,14 +38,14 @@ namespace Infrastructure.Data.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task RemoverAsync(Guid id)
+        public async Task DesativarAsync(Guid id)
         {
             var vendedor = await ObterPorIdAsync(id);
-            if (vendedor == null)
-                throw new ArgumentException("Vendedor não encontrado.");
-
-            _context.Vendedor.Remove(vendedor);
-            await _context.SaveChangesAsync();
+            if (vendedor != null)
+            {
+                vendedor.Desativar();
+                await AtualizarAsync(vendedor);
+            }
         }
     }
 }
