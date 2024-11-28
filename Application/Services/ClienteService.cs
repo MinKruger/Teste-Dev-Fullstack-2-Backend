@@ -63,6 +63,10 @@ namespace Application.Services
         {
             await _clienteRepository.RemoverAsync(id);
         }
-    }
 
+        //public async Task<decimal> ComprasNoPeriodoAsync(Guid clienteId, DateTime inicio, DateTime fim)
+        //{
+        //    return await _clienteRepository.ComprasNoPeriodoAsync(clienteId, inicio, fim);
+        //}
+    }
 }

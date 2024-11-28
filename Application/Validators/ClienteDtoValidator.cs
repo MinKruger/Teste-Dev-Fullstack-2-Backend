@@ -1,21 +1,17 @@
 ﻿using Application.DTOs;
 using CrossCutting.Utils;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Validators
 {
-    public class CreateClienteDtoValidator : AbstractValidator<CreateClienteDto>
+    public class ClienteDtoValidator : AbstractValidator<ClienteDto>
     {
-        public CreateClienteDtoValidator()
+        public ClienteDtoValidator()
         {
+            // Regras comuns para criação e atualização
             RuleFor(c => c.RazaoSocial)
                 .NotEmpty().WithMessage("Razão Social é obrigatória.")
-                .MaximumLength(200);
+                .MaximumLength(200).WithMessage("Razão Social pode conter no máximo 200 caracteres.");
 
             RuleFor(c => c.CNPJ)
                 .NotEmpty().WithMessage("CNPJ é obrigatório.")
@@ -24,6 +20,11 @@ namespace Application.Validators
 
             RuleFor(c => c.Estado)
                 .Length(2).WithMessage("Estado deve conter 2 caracteres.");
+
+            // Regra adicional apenas para atualização
+            RuleFor(c => c.Id)
+                .NotEmpty().WithMessage("O ID é obrigatório para atualizações.")
+                .When(c => c.Id != Guid.Empty); // Só valida se o ID foi informado
         }
 
         private bool BeAValidCNPJ(string cnpj)

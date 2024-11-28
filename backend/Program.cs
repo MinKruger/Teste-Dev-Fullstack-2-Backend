@@ -1,6 +1,8 @@
 using Application.DependencyInjection;
+using Application.Validators;
 using Infrastructure.DependencyInjection;
 using FluentValidation;
+using Application.Mappings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,10 +18,12 @@ builder.Services.AddInfra(builder.Configuration.GetConnectionString("DefaultConn
 builder.Services.AddApplication(); // Adiciona Application
 
 // Configure AutoMapper
-builder.Services.AddAutoMapper(typeof(Application.Mappings.ClienteMappingProfile));
+builder.Services.AddAutoMapper(typeof(ClienteMappingProfile), typeof(VendedorMappingProfile), typeof(PedidoMappingProfile));
 
 // Configure FluentValidation
-builder.Services.AddValidatorsFromAssemblyContaining<Application.Validators.CreateClienteDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<ClienteDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<PedidoDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<VendedorDtoValidator>();
 
 var app = builder.Build();
 

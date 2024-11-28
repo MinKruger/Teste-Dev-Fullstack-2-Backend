@@ -40,9 +40,11 @@ namespace Infrastructure.Data.Repository
             var cliente = await ObterPorIdAsync(id);
             if (cliente != null)
             {
-                _dbContext.Cliente.Remove(cliente);
+                cliente.Desativar(); // Desativa o cliente
+                _dbContext.Cliente.Update(cliente); // Atualiza o cliente no banco
                 await _dbContext.SaveChangesAsync();
             }
         }
+
     }
 }

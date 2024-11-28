@@ -14,6 +14,9 @@ namespace Application.DependencyInjection
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             services.AddScoped<IClienteService, ClienteService>();
+            services.AddScoped<IVendedorService, VendedorService>();
+            services.AddScoped<IPedidoService, PedidoService>();
+
             return services;
         }
     }

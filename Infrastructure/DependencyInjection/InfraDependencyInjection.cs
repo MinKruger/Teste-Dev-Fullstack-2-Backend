@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Domain.Repository;
+using Infrastructure.Data.Repositories;
 
 namespace Infrastructure.DependencyInjection
 {
@@ -22,6 +23,8 @@ namespace Infrastructure.DependencyInjection
             // Registra o repositório com o decorator de cache
             services.AddMemoryCache();
             services.AddScoped<IClienteRepository, ClienteRepository>();
+            services.AddScoped<IVendedorRepository, VendedorRepository>();
+            services.AddScoped<IPedidoRepository, PedidoRepository>();
             //services.Decorate<IClienteRepository, CachedClienteRepository>();
 
             return services;
