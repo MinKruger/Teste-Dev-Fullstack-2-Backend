@@ -16,6 +16,9 @@ namespace API.Configurations
                     Description = "API para gerenciamento de clientes, vendedores e pedidos."
                 });
 
+                // Habilita as anotações do Swagger (SwaggerOperation e outras)
+                c.EnableAnnotations();
+
                 // Define as tags para categorizar os endpoints
                 c.TagActionsBy(apiDesc =>
                 {
