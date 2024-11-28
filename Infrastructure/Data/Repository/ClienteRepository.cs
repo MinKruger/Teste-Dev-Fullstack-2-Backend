@@ -1,45 +1,14 @@
 ﻿using Domain.Entities;
 using Domain.Repository;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Data.Repositories
 {
-    public class ClienteRepository : IClienteRepository
+    public class ClienteRepository : BaseRepository<Cliente>, IClienteRepository
     {
-        private readonly ApplicationDbContext _context;
+        public ClienteRepository(ApplicationDbContext context) : base(context) { }
 
-        public ClienteRepository(ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
-        public async Task<Cliente?> ObterPorIdAsync(Guid id)
-        {
-            return await _context.Cliente.FindAsync(id);
-        }
-
-        public async Task<IEnumerable<Cliente>> ObterTodosAsync()
-        {
-            return await _context.Cliente.ToListAsync();
-        }
-
-        public async Task AdicionarAsync(Cliente cliente)
-        {
-            await _context.Cliente.AddAsync(cliente);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task AtualizarAsync(Cliente cliente)
-        {
-            _context.Cliente.Update(cliente);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task DesativarAsync(Guid id)
+        public async Task DesativarAsync(int id)
         {
             var cliente = await ObterPorIdAsync(id);
             if (cliente != null)

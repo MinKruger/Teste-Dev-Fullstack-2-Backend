@@ -4,25 +4,24 @@ namespace Domain.Entities
 {
     public class Pedido
     {
-        public Guid Id { get; private set; }
+        public int Id { get; private set; }
         public string? DescricaoPedido { get; private set; }
         public decimal ValorTotal { get; private set; }
         public DateTime DataCriacao { get; private set; }
         public string? Observacao { get; private set; }
         public bool Autorizado { get; private set; }
-        public Guid ClienteId { get; private set; } // Chave estrangeira para Cliente
-        public Guid VendedorId { get; private set; } // Chave estrangeira para Vendedor
+        public int ClienteId { get; private set; } // Chave estrangeira para Cliente
+        public int VendedorId { get; private set; } // Chave estrangeira para Vendedor
 
         // Propriedades de navegação
         public virtual Cliente? Cliente { get; private set; } // Relacionamento com Cliente
         public virtual Vendedor? Vendedor { get; private set; } // Relacionamento com Vendedor
 
         // Construtor
-        private Pedido() { } // Para ORMs como EF Core
+        public Pedido() { } // Para ORMs como EF Core
 
-        public Pedido(string descricaoPedido, decimal valorTotal, string observacao, Guid clienteId, Guid vendedorId)
+        public Pedido(string descricaoPedido, decimal valorTotal, string observacao, int clienteId, int vendedorId)
         {
-            Id = Guid.NewGuid();
             SetDescricaoPedido(descricaoPedido);
             SetValorTotal(valorTotal);
             SetObservacao(observacao);

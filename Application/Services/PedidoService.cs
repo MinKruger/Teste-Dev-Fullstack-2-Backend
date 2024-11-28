@@ -27,7 +27,7 @@ namespace Application.Services
             return _mapper.Map<IEnumerable<PedidoDto>>(pedidos);
         }
 
-        public async Task<PedidoDto?> ObterPorIdAsync(Guid id)
+        public async Task<PedidoDto?> ObterPorIdAsync(int id)
         {
             var pedido = await _pedidoRepository.ObterPorIdAsync(id);
             return _mapper.Map<PedidoDto?>(pedido);
@@ -48,7 +48,7 @@ namespace Application.Services
             await _pedidoRepository.AdicionarAsync(pedido);
         }
 
-        public async Task AtualizarAsync(Guid id, UpdatePedidoDto pedidoDto)
+        public async Task AtualizarAsync(int id, UpdatePedidoDto pedidoDto)
         {
             var pedido = await _pedidoRepository.ObterPorIdAsync(id);
             if (pedido == null)
@@ -60,7 +60,7 @@ namespace Application.Services
             await _pedidoRepository.AtualizarAsync(pedido);
         }
 
-        public async Task ExcluirAsync(Guid id)
+        public async Task ExcluirAsync(int id)
         {
             var pedido = await _pedidoRepository.ObterPorIdAsync(id);
             if (pedido == null)

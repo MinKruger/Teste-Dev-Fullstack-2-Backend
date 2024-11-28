@@ -20,11 +20,6 @@ namespace Application.Validators
 
             RuleFor(c => c.Estado)
                 .Length(2).WithMessage("Estado deve conter 2 caracteres.");
-
-            // Regra adicional apenas para atualização
-            RuleFor(c => c.Id)
-                .NotEmpty().WithMessage("O ID é obrigatório para atualizações.")
-                .When(c => c.Id != Guid.Empty); // Só valida se o ID foi informado
         }
 
         private bool BeAValidCNPJ(string cnpj)

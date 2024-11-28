@@ -8,9 +8,9 @@ namespace Application.Interfaces
     public interface IPedidoService
     {
         Task<IEnumerable<PedidoDto>> ObterTodosAsync();
-        Task<PedidoDto?> ObterPorIdAsync(Guid id);
+        Task<PedidoDto?> ObterPorIdAsync(int id);
         Task AdicionarAsync(CreatePedidoDto pedidoDto);
-        Task AtualizarAsync(Guid id, UpdatePedidoDto pedidoDto);
-        Task ExcluirAsync(Guid id);
+        Task AtualizarAsync(int id, UpdatePedidoDto pedidoDto);
+        Task ExcluirAsync(int id);
     }
 }

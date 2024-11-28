@@ -20,7 +20,7 @@
 //            _cache = cache ?? throw new ArgumentNullException(nameof(cache));
 //        }
 
-//        public async Task<Cliente?> ObterPorIdAsync(Guid id)
+//        public async Task<Cliente?> ObterPorIdAsync(int id)
 //        {
 //            var cacheKey = $"Cliente-{id}";
 //            if (!_cache.TryGetValue(cacheKey, out Cliente? cliente))
@@ -58,7 +58,7 @@
 //            _cache.Remove("Clientes-Todos");
 //        }
 
-//        public async Task RemoverAsync(Guid id)
+//        public async Task RemoverAsync(int id)
 //        {
 //            await _innerRepository.RemoverAsync(id);
 //            _cache.Remove($"Cliente-{id}");

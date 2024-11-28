@@ -22,6 +22,7 @@ namespace Infrastructure.DependencyInjection
 
             // Registra o repositório com o decorator de cache
             services.AddMemoryCache();
+            services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddScoped<IClienteRepository, ClienteRepository>();
             services.AddScoped<IVendedorRepository, VendedorRepository>();
             services.AddScoped<IPedidoRepository, PedidoRepository>();

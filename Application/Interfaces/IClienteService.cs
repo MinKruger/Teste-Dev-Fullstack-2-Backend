@@ -8,10 +8,10 @@ namespace Application.Interfaces
     public interface IClienteService
     {
         Task<IEnumerable<ClienteDto>> ObterTodosAsync();
-        Task<ClienteDto?> ObterPorIdAsync(Guid id);
+        Task<ClienteDto?> ObterPorIdAsync(int id);
         Task AdicionarPorCnpjAsync(string cnpj);
-        Task AtualizarAsync(Guid id, UpdateClienteDto clienteDto);
-        Task DesativarAsync(Guid id);
+        Task AtualizarAsync(int id, UpdateClienteDto clienteDto);
+        Task DesativarAsync(int id);
         Task<decimal> ObterTotalComprasNoPeriodoAsync(DateTime inicio, DateTime fim);
     }
 }

@@ -2,7 +2,7 @@
 using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-[Route("api/[controller]")]
+[Route("api/clientes")]
 [ApiController]
 public class ClienteController : ControllerBase
 {
@@ -20,8 +20,8 @@ public class ClienteController : ControllerBase
         return Ok(clientes);
     }
 
-    [HttpGet("{id:guid}")]
-    public async Task<IActionResult> ObterPorId(Guid id)
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> ObterPorId(int id)
     {
         var cliente = await _clienteService.ObterPorIdAsync(id);
         if (cliente == null)
@@ -46,8 +46,8 @@ public class ClienteController : ControllerBase
         }
     }
 
-    [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Atualizar(Guid id, [FromBody] UpdateClienteDto clienteDto)
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> Atualizar(int id, [FromBody] UpdateClienteDto clienteDto)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -63,8 +63,8 @@ public class ClienteController : ControllerBase
         }
     }
 
-    [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> Desativar(Guid id)
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Desativar(int id)
     {
         try
         {

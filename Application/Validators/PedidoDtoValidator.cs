@@ -7,10 +7,6 @@ namespace Application.Validators
     {
         public PedidoDtoValidator()
         {
-            RuleFor(p => p.Id)
-                .NotEmpty().WithMessage("O ID é obrigatório.") // Aplica-se apenas em contexto de atualização
-                .When(p => p.Id != Guid.Empty);
-
             RuleFor(p => p.DescricaoPedido)
                 .NotEmpty().WithMessage("A descrição do pedido é obrigatória.")
                 .MaximumLength(500).WithMessage("A descrição do pedido pode conter no máximo 500 caracteres.");

@@ -7,10 +7,6 @@ namespace Application.Validators
     {
         public VendedorDtoValidator()
         {
-            RuleFor(v => v.Id)
-                .NotEmpty().WithMessage("O ID é obrigatório.") // Aplica-se apenas em contexto de atualização
-                .When(v => v.Id != Guid.Empty);
-
             RuleFor(v => v.Nome)
                 .NotEmpty().WithMessage("O nome é obrigatório.")
                 .MaximumLength(200).WithMessage("O nome pode conter no máximo 200 caracteres.");

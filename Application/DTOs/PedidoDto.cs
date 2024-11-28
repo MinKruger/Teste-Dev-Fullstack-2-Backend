@@ -4,14 +4,14 @@ namespace Application.DTOs
 {
     public class PedidoDto
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string? DescricaoPedido { get; set; }
         public decimal ValorTotal { get; set; }
         public DateTime DataCriacao { get; set; }
         public string? Observacao { get; set; }
         public bool Autorizado { get; set; }
-        public Guid ClienteId { get; set; }
-        public Guid VendedorId { get; set; }
+        public int ClienteId { get; set; }
+        public int VendedorId { get; set; }
     }
 
     public class CreatePedidoDto
@@ -19,8 +19,8 @@ namespace Application.DTOs
         public string? DescricaoPedido { get; set; }
         public decimal ValorTotal { get; set; }
         public string? Observacao { get; set; }
-        public Guid ClienteId { get; set; }
-        public Guid VendedorId { get; set; }
+        public int ClienteId { get; set; }
+        public int VendedorId { get; set; }
     }
 
     public class UpdatePedidoDto
@@ -29,7 +29,7 @@ namespace Application.DTOs
         public decimal ValorTotal { get; set; }
         public string? Observacao { get; set; }
         public bool Autorizado { get; set; }
-        public Guid ClienteId { get; set; }
-        public Guid VendedorId { get; set; }
+        public int ClienteId { get; set; }
+        public int VendedorId { get; set; }
     }
 }

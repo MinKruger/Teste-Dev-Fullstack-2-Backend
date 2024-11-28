@@ -4,6 +4,7 @@ using Infrastructure.DependencyInjection;
 using FluentValidation;
 using Application.Mappings;
 using Application.Services;
+using API.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +20,6 @@ builder.Services.AddInfra(builder.Configuration.GetConnectionString("DefaultConn
 builder.Services.AddApplication(); // Adiciona Application
 builder.Services.AddHttpClient<ExternalApiService>();
 
-
 // Configure AutoMapper
 builder.Services.AddAutoMapper(typeof(ClienteMappingProfile), typeof(VendedorMappingProfile), typeof(PedidoMappingProfile));
 
@@ -28,13 +28,18 @@ builder.Services.AddValidatorsFromAssemblyContaining<ClienteDtoValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<PedidoDtoValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<VendedorDtoValidator>();
 
+builder.Services.AddCustomSwagger();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1");
+    });
 }
 
 app.UseHttpsRedirection();

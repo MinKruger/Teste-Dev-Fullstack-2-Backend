@@ -6,7 +6,7 @@ namespace Domain.Entities
 {
     public class Cliente
     {
-        public Guid Id { get; private set; }
+        public int Id { get; private set; }
         public string? RazaoSocial { get; private set; }
         public string? NomeFantasia { get; private set; }
         public string? Logradouro { get; private set; }
@@ -17,11 +17,10 @@ namespace Domain.Entities
         public bool Ativo { get; private set; }
 
         // Construtor
-        private Cliente() { } // Para ORMs como EF Core
+        public Cliente() { } // Para ORMs como EF Core
 
         public Cliente(string razaoSocial, string nomeFantasia, string cnpj, string logradouro, string bairro, string cidade, string estado)
         {
-            Id = Guid.NewGuid();
             SetRazaoSocial(razaoSocial);
             SetNomeFantasia(nomeFantasia);
             SetCNPJ(cnpj);

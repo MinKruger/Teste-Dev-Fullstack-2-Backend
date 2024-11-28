@@ -4,18 +4,17 @@ namespace Domain.Entities
 {
     public class Vendedor
     {
-        public Guid Id { get; private set; }
+        public int Id { get; private set; }
         public string? Nome { get; private set; }
         public string? CodigoVendedor { get; private set; }
         public string? Apelido { get; private set; }
         public bool Ativo { get; private set; }
 
         // Construtor
-        private Vendedor() { } // Para ORMs como EF Core
+        public Vendedor() { } // Para ORMs como EF Core
 
         public Vendedor(string nome, string codigoVendedor, string apelido)
         {
-            Id = Guid.NewGuid();
             SetNome(nome);
             SetCodigoVendedor(codigoVendedor);
             SetApelido(apelido);

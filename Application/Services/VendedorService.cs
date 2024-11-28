@@ -25,7 +25,7 @@ namespace Application.Services
             return _mapper.Map<IEnumerable<VendedorDto>>(vendedores);
         }
 
-        public async Task<VendedorDto?> ObterPorIdAsync(Guid id)
+        public async Task<VendedorDto?> ObterPorIdAsync(int id)
         {
             var vendedor = await _vendedorRepository.ObterPorIdAsync(id);
             return _mapper.Map<VendedorDto?>(vendedor);
@@ -37,7 +37,7 @@ namespace Application.Services
             await _vendedorRepository.AdicionarAsync(vendedor);
         }
 
-        public async Task AtualizarAsync(Guid id, UpdateVendedorDto vendedorDto)
+        public async Task AtualizarAsync(int id, UpdateVendedorDto vendedorDto)
         {
             var vendedor = await _vendedorRepository.ObterPorIdAsync(id);
             if (vendedor == null)
@@ -49,7 +49,7 @@ namespace Application.Services
             await _vendedorRepository.AtualizarAsync(vendedor);
         }
 
-        public async Task DesativarAsync(Guid id)
+        public async Task DesativarAsync(int id)
         {
             var vendedor = await _vendedorRepository.ObterPorIdAsync(id);
             if (vendedor == null)

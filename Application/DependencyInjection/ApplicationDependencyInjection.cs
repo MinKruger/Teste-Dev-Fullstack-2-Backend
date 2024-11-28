@@ -16,6 +16,7 @@ namespace Application.DependencyInjection
             services.AddScoped<IClienteService, ClienteService>();
             services.AddScoped<IVendedorService, VendedorService>();
             services.AddScoped<IPedidoService, PedidoService>();
+            services.AddScoped<IDatabaseSeederService, DatabaseSeederService>();
 
             return services;
         }

@@ -25,7 +25,7 @@ namespace Application.Services
             return _mapper.Map<IEnumerable<ClienteDto>>(clientes);
         }
 
-        public async Task<ClienteDto?> ObterPorIdAsync(Guid id)
+        public async Task<ClienteDto?> ObterPorIdAsync(int id)
         {
             var cliente = await _clienteRepository.ObterPorIdAsync(id);
             return _mapper.Map<ClienteDto?>(cliente);
@@ -39,7 +39,7 @@ namespace Application.Services
             await _clienteRepository.AdicionarAsync(cliente);
         }
 
-        public async Task AtualizarAsync(Guid id, UpdateClienteDto clienteDto)
+        public async Task AtualizarAsync(int id, UpdateClienteDto clienteDto)
         {
             var cliente = await _clienteRepository.ObterPorIdAsync(id);
             if (cliente == null)
@@ -51,7 +51,7 @@ namespace Application.Services
             await _clienteRepository.AtualizarAsync(cliente);
         }
 
-        public async Task DesativarAsync(Guid id)
+        public async Task DesativarAsync(int id)
         {
             var cliente = await _clienteRepository.ObterPorIdAsync(id);
             if (cliente == null)
