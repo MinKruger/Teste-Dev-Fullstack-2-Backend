@@ -41,8 +41,6 @@ namespace Domain.Entities
 
         public void SetNomeFantasia(string nomeFantasia)
         {
-            if (string.IsNullOrWhiteSpace(nomeFantasia))
-                throw new ArgumentException("Nome Fantasia é obrigatório.");
             NomeFantasia = nomeFantasia;
         }
 

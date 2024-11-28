@@ -38,8 +38,6 @@ namespace Domain.Entities
 
         public void SetApelido(string apelido)
         {
-            if (string.IsNullOrWhiteSpace(apelido))
-                throw new ArgumentException("Apelido é obrigatório.");
             Apelido = apelido;
         }
 

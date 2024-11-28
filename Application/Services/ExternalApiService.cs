@@ -16,25 +16,15 @@ namespace Application.Services
 
         public async Task<ClienteDto> ObterDadosPorCnpjAsync(string cnpj)
         {
-            // URL da API de mockagem que retorna dados de empresa com base no CNPJ
-            var url = $"https://www.4devs.com.br/ferramentas_online.php";
+            // URL da API ReceitaWS para consulta de CNPJ
+            var url = $"https://www.receitaws.com.br/v1/cnpj/{cnpj}";
 
-            // Parâmetros necessários para a requisição
-            var parameters = new Dictionary<string, string>
-            {
-                { "acao", "gerar_empresa" },
-                { "txt_cnpj", cnpj },
-                { "pontuacao", "N" }
-            };
-
-            var content = new FormUrlEncodedContent(parameters);
-
-            // Envia a requisição POST para a API externa
-            var response = await _httpClient.PostAsync(url, content);
+            // Envia a requisição GET para a API externa
+            var response = await _httpClient.GetAsync(url);
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new HttpRequestException("Erro ao obter dados da empresa.");
+                throw new HttpRequestException($"Erro ao obter dados da empresa. Status Code: {response.StatusCode}");
             }
 
             // Lê o conteúdo da resposta
@@ -43,20 +33,26 @@ namespace Application.Services
             // Converte o conteúdo para um objeto JSON
             var json = JObject.Parse(responseContent);
 
-            // Mapeia os dados para o DTO de Empresa
-            var empresaDto = new ClienteDto
+            // Verifica se há erro na resposta
+            if (json["status"]?.ToString() != "OK")
+            {
+                throw new HttpRequestException($"Erro na consulta: {json["message"]?.ToString()}");
+            }
+
+            // Mapeia os dados para o ClienteDto
+            var clienteDto = new ClienteDto
             {
                 RazaoSocial = json["nome"]?.ToString(),
                 NomeFantasia = json["fantasia"]?.ToString(),
                 CNPJ = json["cnpj"]?.ToString(),
-                Logradouro = json["endereco"]?.ToString(),
+                Logradouro = json["logradouro"]?.ToString(),
                 Bairro = json["bairro"]?.ToString(),
-                Cidade = json["cidade"]?.ToString(),
-                Estado = json["estado"]?.ToString(),
-                Ativo = true // Considera que a empresa está ativa
+                Cidade = json["municipio"]?.ToString(),
+                Estado = json["uf"]?.ToString(),
+                Ativo = true // Presume que empresas consultadas estão ativas
             };
 
-            return empresaDto;
+            return clienteDto;
         }
     }
 }
