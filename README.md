@@ -113,11 +113,11 @@ O projeto utiliza os seguintes padrões e práticas:
 ### Passos para Clonar e Compilar
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/seu-usuario/seu-repositorio.git
+   git clone https://github.com/SEU-USUARIO/Teste-Dev-Fullstack-2-Backend.git
    ```
 2. Entre no diretório do projeto:
    ```bash
-   cd seu-repositorio
+   cd Teste-Dev-Fullstack-2-Backend
    ```
 3. Restaure as dependências:
    ```bash
