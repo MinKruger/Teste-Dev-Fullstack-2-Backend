@@ -29,6 +29,11 @@ namespace Infrastructure.Data.Repositories
             return await _context.Cliente.FindAsync(clienteId);
         }
 
+        public async Task<List<PedidoDetalhado>> ObterPedidosDetalhados()
+        {
+            return await _context.ViewPedidosDetalhados.ToListAsync();
+        }
+
         public async Task RemoverAsync(int id)
         {
             var pedido = await ObterPorIdAsync(id);

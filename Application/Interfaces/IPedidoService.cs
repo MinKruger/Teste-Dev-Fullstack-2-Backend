@@ -9,6 +9,7 @@ namespace Application.Interfaces
     {
         Task<IEnumerable<PedidoDto>> ObterTodosAsync();
         Task<PedidoDto?> ObterPorIdAsync(int id);
+        Task<IEnumerable<PedidoDetalhadoDto>> ObterPedidosDetalhados();
         Task AdicionarAsync(CreatePedidoDto pedidoDto);
         Task AtualizarAsync(int id, UpdatePedidoDto pedidoDto);
         Task ExcluirAsync(int id);

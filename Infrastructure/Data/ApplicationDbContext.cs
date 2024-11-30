@@ -8,6 +8,7 @@ namespace Infrastructure.Data
         public DbSet<Cliente> Cliente { get; set; }
         public DbSet<Vendedor> Vendedor { get; set; }
         public DbSet<Pedido> Pedido { get; set; }
+        public DbSet<PedidoDetalhado> ViewPedidosDetalhados { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }

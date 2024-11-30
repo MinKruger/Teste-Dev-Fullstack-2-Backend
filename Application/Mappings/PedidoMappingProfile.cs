@@ -11,6 +11,7 @@ namespace Application.Mappings
             CreateMap<Pedido, PedidoDto>().ReverseMap();
             CreateMap<CreatePedidoDto, Pedido>();
             CreateMap<UpdatePedidoDto, Pedido>();
+            CreateMap<PedidoDetalhado, PedidoDetalhadoDto>().ReverseMap();
         }
     }
 }

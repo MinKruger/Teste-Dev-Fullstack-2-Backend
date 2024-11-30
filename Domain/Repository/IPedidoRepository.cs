@@ -9,6 +9,7 @@ namespace Domain.Repository
     {
         Task<decimal> ObterTotalVendasPorVendedoresNoPeriodoAsync(DateTime inicio, DateTime fim);
         Task<Cliente?> ObterMelhorClienteAsync();
+        Task<List<PedidoDetalhado>> ObterPedidosDetalhados();
         Task RemoverAsync(int id);
     }
 }

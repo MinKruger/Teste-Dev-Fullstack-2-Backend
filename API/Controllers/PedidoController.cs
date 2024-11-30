@@ -45,6 +45,23 @@ public class PedidoController : ControllerBase
     }
 
     /// <summary>
+    /// Obtém resultados de uma view responsável pelo relacionamento de pedidos, clientes e vendedores
+    /// </summary>
+    /// <returns>Mesmo retorno que o ObterTodos porem com mais informações</returns>
+    [HttpGet("PedidosDetalhados")]
+    [SwaggerOperation(Summary = "Obter dados de View", Description = "Retorna dados de uma view que relaciona pedidos, clientes e vendedores")]
+    [ProducesResponseType(typeof(PedidoDto), 200)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> ObterPedidosDetalhados()
+    {
+        var pedido = await _pedidoService.ObterPedidosDetalhados();
+
+        if (!pedido.Any())
+            return NotFound("Nenhum pedido encontrado.");
+        return Ok(pedido);
+    }
+
+    /// <summary>
     /// Cria um novo pedido (somente se vendedor e cliente estiverem ativos).
     /// </summary>
     /// <param name="pedidoDto">Dados do novo pedido.</param>

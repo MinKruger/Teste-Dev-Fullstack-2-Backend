@@ -60,6 +60,12 @@ namespace Application.Services
             await _pedidoRepository.AtualizarAsync(pedido);
         }
 
+        public async Task<IEnumerable<PedidoDetalhadoDto>> ObterPedidosDetalhados()
+        {
+            var pedidos = await _pedidoRepository.ObterPedidosDetalhados();
+            return _mapper.Map<IEnumerable<PedidoDetalhadoDto>>(pedidos);
+        }
+
         public async Task ExcluirAsync(int id)
         {
             var pedido = await _pedidoRepository.ObterPorIdAsync(id);
