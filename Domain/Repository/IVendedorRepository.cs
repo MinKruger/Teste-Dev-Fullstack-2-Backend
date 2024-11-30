@@ -7,6 +7,7 @@ namespace Domain.Repository
 {
     public interface IVendedorRepository : IBaseRepository<Vendedor>
     {
+        Task<List<PedidoPorVendedor>> ObterTotalVendasPorCodigoVendedorAsync(string codigoVendedor);
         Task DesativarAsync(int id);
     }
 }

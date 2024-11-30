@@ -61,6 +61,12 @@ namespace Application.Services
             await _vendedorRepository.AtualizarAsync(vendedor);
         }
 
+        public async Task<List<PedidoPorVendedorDto>> ObterTotalVendasPorCodigoVendedorAsync(string codigoVendedor)
+        {
+            var vendas = await _vendedorRepository.ObterTotalVendasPorCodigoVendedorAsync(codigoVendedor);
+            return _mapper.Map<List<PedidoPorVendedorDto>>(vendas);
+        }
+
         public async Task<decimal> ObterTotalVendasNoPeriodoAsync(DateTime inicio, DateTime fim)
         {
             return await _pedidoRepository.ObterTotalVendasPorVendedoresNoPeriodoAsync(inicio, fim);

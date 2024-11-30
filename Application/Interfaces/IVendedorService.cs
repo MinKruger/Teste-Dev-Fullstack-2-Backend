@@ -14,5 +14,6 @@ namespace Application.Interfaces
         Task DesativarAsync(int id);
         Task<decimal> ObterTotalVendasNoPeriodoAsync(DateTime inicio, DateTime fim);
         Task<ClienteDto?> ObterMelhorClienteAsync();
+        Task<List<PedidoPorVendedorDto>> ObterTotalVendasPorCodigoVendedorAsync(string codigoVendedor);
     }
 }

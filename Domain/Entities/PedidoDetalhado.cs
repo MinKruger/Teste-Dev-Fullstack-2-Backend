@@ -19,4 +19,13 @@ namespace Domain.Entities
 
         public PedidoDetalhado() { } // Para ORMs como EF Core
     }
+
+    public class PedidoPorVendedor
+    {
+        public string? DescricaoPedido { get; set; }
+        public decimal ValorTotal { get; set; }
+        public DateTime DataCriacao { get; set; }
+        public string? Observacao { get; set; }
+        public bool Autorizado { get; set; }
+    }
 }

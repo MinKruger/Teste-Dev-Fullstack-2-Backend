@@ -17,4 +17,13 @@ namespace Application.DTOs
         public string? CNPJ { get; set; }
         public string? NomeVendedor { get; set; }
     }
+
+    public class PedidoPorVendedorDto
+    {
+        public string? DescricaoPedido { get; set; }
+        public decimal ValorTotal { get; set; }
+        public DateTime DataCriacao { get; set; }
+        public string? Observacao { get; set; }
+        public bool Autorizado { get; set; }
+    }
 }

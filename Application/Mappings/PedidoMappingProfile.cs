@@ -9,9 +9,10 @@ namespace Application.Mappings
         public PedidoMappingProfile()
         {
             CreateMap<Pedido, PedidoDto>().ReverseMap();
+            CreateMap<PedidoDetalhado, PedidoDetalhadoDto>().ReverseMap();
+            CreateMap<PedidoPorVendedor, PedidoPorVendedorDto>().ReverseMap();
             CreateMap<CreatePedidoDto, Pedido>();
             CreateMap<UpdatePedidoDto, Pedido>();
-            CreateMap<PedidoDetalhado, PedidoDetalhadoDto>().ReverseMap();
         }
     }
 }

@@ -137,4 +137,19 @@ public class VendedorController : ControllerBase
         var cliente = await _vendedorService.ObterMelhorClienteAsync();
         return Ok(cliente);
     }
+
+    /// <summary>
+    /// Retorna as vendas realizadas a partir de uma stored procedure
+    /// </summary>
+    /// <param name="codigoVendedor">Codigo do vendedor.</param>
+    /// <returns>Vendas realizadas por aquele vendedor</returns>
+    [HttpGet("ObterTotalVendas/{codigoVendedor}")]
+    [SwaggerOperation(Summary = "Obter dados via stored procedure", Description = "Retorna as vendas realizadas a partir de uma stored procedure")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    public async Task<IActionResult> ObterTotalVendasPorCodigoVendedor(string codigoVendedor)
+    {
+        var vendas = await _vendedorService.ObterTotalVendasPorCodigoVendedorAsync(codigoVendedor);
+        return Ok(vendas);
+    }
 }
