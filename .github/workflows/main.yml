@@ -8,7 +8,7 @@ on:
 
 env:
   DOTNET_VERSION: '7.0.x'
-  PROJECT_PATH: './API'
+  PROJECT_PATH: 'API/backend.sln'
 
 jobs:
   build:
