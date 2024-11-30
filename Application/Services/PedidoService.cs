@@ -23,59 +23,101 @@ namespace Application.Services
 
         public async Task<IEnumerable<PedidoDto>> ObterTodosAsync()
         {
-            var pedidos = await _pedidoRepository.ObterTodosAsync();
-            return _mapper.Map<IEnumerable<PedidoDto>>(pedidos);
+            try
+            {
+                var pedidos = await _pedidoRepository.ObterTodosAsync();
+                return _mapper.Map<IEnumerable<PedidoDto>>(pedidos);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public async Task<PedidoDto?> ObterPorIdAsync(int id)
         {
-            var pedido = await _pedidoRepository.ObterPorIdAsync(id);
-            return _mapper.Map<PedidoDto?>(pedido);
+            try
+            {
+                var pedido = await _pedidoRepository.ObterPorIdAsync(id);
+                return _mapper.Map<PedidoDto?>(pedido);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public async Task AdicionarAsync(CreatePedidoDto pedidoDto)
         {
-            var cliente = await _clienteRepository.ObterPorIdAsync(pedidoDto.ClienteId);
-            var vendedor = await _vendedorRepository.ObterPorIdAsync(pedidoDto.VendedorId);
+            try
+            {
+                var cliente = await _clienteRepository.ObterPorIdAsync(pedidoDto.ClienteId);
+                var vendedor = await _vendedorRepository.ObterPorIdAsync(pedidoDto.VendedorId);
 
-            if (cliente == null || !cliente.Ativo)
-                throw new Exception("Cliente inativo ou não encontrado.");
+                if (cliente == null || !cliente.Ativo)
+                    throw new Exception("Cliente inativo ou não encontrado.");
 
-            if (vendedor == null || !vendedor.Ativo)
-                throw new Exception("Vendedor inativo ou não encontrado.");
+                if (vendedor == null || !vendedor.Ativo)
+                    throw new Exception("Vendedor inativo ou não encontrado.");
 
-            var pedido = _mapper.Map<Pedido>(pedidoDto);
-            await _pedidoRepository.AdicionarAsync(pedido);
+                var pedido = _mapper.Map<Pedido>(pedidoDto);
+                await _pedidoRepository.AdicionarAsync(pedido);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public async Task AtualizarAsync(int id, UpdatePedidoDto pedidoDto)
         {
-            var pedido = await _pedidoRepository.ObterPorIdAsync(id);
-            if (pedido == null)
+            try
             {
-                throw new Exception("Pedido não encontrado.");
-            }
+                var pedido = await _pedidoRepository.ObterPorIdAsync(id);
+                if (pedido == null)
+                {
+                    throw new Exception("Pedido não encontrado.");
+                }
 
-            _mapper.Map(pedidoDto, pedido);
-            await _pedidoRepository.AtualizarAsync(pedido);
+                _mapper.Map(pedidoDto, pedido);
+                await _pedidoRepository.AtualizarAsync(pedido);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public async Task<IEnumerable<PedidoDetalhadoDto>> ObterPedidosDetalhados()
         {
-            var pedidos = await _pedidoRepository.ObterPedidosDetalhados();
-            return _mapper.Map<IEnumerable<PedidoDetalhadoDto>>(pedidos);
+            try
+            {
+                var pedidos = await _pedidoRepository.ObterPedidosDetalhados();
+                return _mapper.Map<IEnumerable<PedidoDetalhadoDto>>(pedidos);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public async Task ExcluirAsync(int id)
         {
-            var pedido = await _pedidoRepository.ObterPorIdAsync(id);
-            if (pedido == null)
-                throw new Exception("Pedido não encontrado.");
+            try
+            {
+                var pedido = await _pedidoRepository.ObterPorIdAsync(id);
+                if (pedido == null)
+                    throw new Exception("Pedido não encontrado.");
 
-            if (pedido.Autorizado)
-                throw new Exception("Não é possível excluir um pedido autorizado.");
+                if (pedido.Autorizado)
+                    throw new Exception("Não é possível excluir um pedido autorizado.");
 
-            await _pedidoRepository.RemoverAsync(id);
+                await _pedidoRepository.RemoverAsync(id);
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }

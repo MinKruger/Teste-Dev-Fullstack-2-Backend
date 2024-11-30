@@ -21,61 +21,117 @@ namespace Application.Services
 
         public async Task<IEnumerable<VendedorDto>> ObterTodosAsync()
         {
-            var vendedores = await _vendedorRepository.ObterTodosAsync();
-            return _mapper.Map<IEnumerable<VendedorDto>>(vendedores);
+            try
+            {
+                var vendedores = await _vendedorRepository.ObterTodosAsync();
+                return _mapper.Map<IEnumerable<VendedorDto>>(vendedores);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public async Task<VendedorDto?> ObterPorIdAsync(int id)
         {
-            var vendedor = await _vendedorRepository.ObterPorIdAsync(id);
-            return _mapper.Map<VendedorDto?>(vendedor);
+            try
+            {
+                var vendedor = await _vendedorRepository.ObterPorIdAsync(id);
+                return _mapper.Map<VendedorDto?>(vendedor);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public async Task AdicionarAsync(CreateVendedorDto vendedorDto)
         {
-            var vendedor = _mapper.Map<Vendedor>(vendedorDto);
-            await _vendedorRepository.AdicionarAsync(vendedor);
+            try
+            {
+                var vendedor = _mapper.Map<Vendedor>(vendedorDto);
+                await _vendedorRepository.AdicionarAsync(vendedor);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public async Task AtualizarAsync(int id, UpdateVendedorDto vendedorDto)
         {
-            var vendedor = await _vendedorRepository.ObterPorIdAsync(id);
-            if (vendedor == null)
+            try
             {
-                throw new Exception("Vendedor não encontrado.");
-            }
+                var vendedor = await _vendedorRepository.ObterPorIdAsync(id);
+                if (vendedor == null)
+                {
+                    throw new Exception("Vendedor não encontrado.");
+                }
 
-            _mapper.Map(vendedorDto, vendedor);
-            await _vendedorRepository.AtualizarAsync(vendedor);
+                _mapper.Map(vendedorDto, vendedor);
+                await _vendedorRepository.AtualizarAsync(vendedor);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public async Task DesativarAsync(int id)
         {
-            var vendedor = await _vendedorRepository.ObterPorIdAsync(id);
-            if (vendedor == null)
+            try
             {
-                throw new Exception("Vendedor não encontrado.");
-            }
+                var vendedor = await _vendedorRepository.ObterPorIdAsync(id);
+                if (vendedor == null)
+                {
+                    throw new Exception("Vendedor não encontrado.");
+                }
 
-            vendedor.Desativar();
-            await _vendedorRepository.AtualizarAsync(vendedor);
+                vendedor.Desativar();
+                await _vendedorRepository.AtualizarAsync(vendedor);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public async Task<List<PedidoPorVendedorDto>> ObterTotalVendasPorCodigoVendedorAsync(string codigoVendedor)
         {
-            var vendas = await _vendedorRepository.ObterTotalVendasPorCodigoVendedorAsync(codigoVendedor);
-            return _mapper.Map<List<PedidoPorVendedorDto>>(vendas);
+            try
+            {
+                var vendas = await _vendedorRepository.ObterTotalVendasPorCodigoVendedorAsync(codigoVendedor);
+                return _mapper.Map<List<PedidoPorVendedorDto>>(vendas);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public async Task<decimal> ObterTotalVendasNoPeriodoAsync(DateTime inicio, DateTime fim)
         {
-            return await _pedidoRepository.ObterTotalVendasPorVendedoresNoPeriodoAsync(inicio, fim);
+            try
+            {
+                return await _pedidoRepository.ObterTotalVendasPorVendedoresNoPeriodoAsync(inicio, fim);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public async Task<ClienteDto?> ObterMelhorClienteAsync()
         {
-            var melhorCliente = await _pedidoRepository.ObterMelhorClienteAsync();
-            return _mapper.Map<ClienteDto?>(melhorCliente);
+            try
+            {
+                var melhorCliente = await _pedidoRepository.ObterMelhorClienteAsync();
+                return _mapper.Map<ClienteDto?>(melhorCliente);
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }
