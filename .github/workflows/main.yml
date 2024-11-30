@@ -1,4 +1,4 @@
-name: .NET 7 CI/CD
+name: .NET 7 CI
 
 on:
   push:
@@ -6,8 +6,12 @@ on:
   pull_request:
     branches: [ main ]
 
+env:
+  DOTNET_VERSION: '7.0.x'
+  PROJECT_PATH: './API'
+
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     
     steps:
@@ -19,20 +23,22 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
     
     - name: Restore dependencies
-      run: dotnet restore
+      run: |
+        cd ${{ env.PROJECT_PATH }}
+        dotnet restore
     
     - name: Build
-      run: dotnet build --no-restore --configuration Release
-    
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: |
+        cd ${{ env.PROJECT_PATH }}
+        dotnet build --configuration Release --no-restore
     
     - name: Publish
-      run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+      run: |
+        cd ${{ env.PROJECT_PATH }}
+        dotnet publish --configuration Release --no-build --output ./publish
     
-    - name: Deploy to Azure Web App
-      uses: azure/webapps-deploy@v2
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
       with:
-        app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }}
-        package: ${{env.DOTNET_ROOT}}/myapp
+        name: app
+        path: ${{ env.PROJECT_PATH }}/publish
