@@ -18,36 +18,84 @@ namespace Infrastructure.Data.Repositories
 
         public async Task<T?> ObterPorIdAsync(int id)
         {
-            return await _context.Set<T>().FindAsync(id);
+            try
+            {
+                return await _context.Set<T>().FindAsync(id);
+            }
+            catch (Exception ex)
+            {
+                // Log exception (if logging is configured)
+                throw new Exception($"Error fetching entity by ID {id}: {ex.Message}", ex);
+            }
         }
 
         public async Task<IEnumerable<T>> ObterTodosAsync()
         {
-            return await _context.Set<T>().ToListAsync();
+            try
+            {
+                return await _context.Set<T>().ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log exception (if logging is configured)
+                throw new Exception($"Error fetching all entities: {ex.Message}", ex);
+            }
         }
 
         public async Task AdicionarAsync(T entity)
         {
-            await _context.Set<T>().AddAsync(entity);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.Set<T>().AddAsync(entity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log exception (if logging is configured)
+                throw new Exception($"Error adding entity: {ex.Message}", ex);
+            }
         }
 
         public async Task AdicionarEmLoteAsync(IEnumerable<T> entities)
         {
-            await _context.Set<T>().AddRangeAsync(entities);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.Set<T>().AddRangeAsync(entities);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log exception (if logging is configured)
+                throw new Exception($"Error adding entities in bulk: {ex.Message}", ex);
+            }
         }
 
         public async Task AtualizarAsync(T entity)
         {
-            _context.Set<T>().Update(entity);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Set<T>().Update(entity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log exception (if logging is configured)
+                throw new Exception($"Error updating entity: {ex.Message}", ex);
+            }
         }
 
         public async Task RemoverAsync(T entity)
         {
-            _context.Set<T>().Remove(entity);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Set<T>().Remove(entity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log exception (if logging is configured)
+                throw new Exception($"Error removing entity: {ex.Message}", ex);
+            }
         }
     }
 }

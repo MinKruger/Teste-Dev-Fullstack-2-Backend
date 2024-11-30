@@ -10,19 +10,35 @@ namespace Infrastructure.Data.Repositories
 
         public async Task DesativarAsync(int id)
         {
-            var cliente = await ObterPorIdAsync(id);
-            if (cliente != null)
+            try
             {
-                cliente.Desativar();
-                await AtualizarAsync(cliente);
+                var cliente = await ObterPorIdAsync(id);
+                if (cliente != null)
+                {
+                    cliente.Desativar();
+                    await AtualizarAsync(cliente);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log do erro ou tratamento adicional
+                throw new Exception($"Erro ao desativar o cliente com ID {id}.", ex);
             }
         }
 
         public async Task<decimal> ObterTotalComprasNoPeriodoAsync(DateTime inicio, DateTime fim)
         {
-            return await _context.Pedido
-                .Where(p => p.ClienteId != null && p.DataCriacao >= inicio && p.DataCriacao <= fim)
-                .SumAsync(p => p.ValorTotal);
+            try
+            {
+                return await _context.Pedido
+                    .Where(p => p.ClienteId != null && p.DataCriacao >= inicio && p.DataCriacao <= fim)
+                    .SumAsync(p => p.ValorTotal);
+            }
+            catch (Exception ex)
+            {
+                // Log do erro ou tratamento adicional
+                throw new Exception("Erro ao obter o total de compras no período especificado.", ex);
+            }
         }
     }
 }
