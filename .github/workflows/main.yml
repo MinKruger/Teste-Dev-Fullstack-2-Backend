@@ -1,4 +1,4 @@
-name: .NET 7 CI
+name: .NET Build and Publish
 
 on:
   push:
@@ -6,40 +6,30 @@ on:
   pull_request:
     branches: [ main ]
 
-env:
-  DOTNET_VERSION: '7.0.x'
-  PROJECT_PATH: 'API'
-  SOLUTION_FILE: 'backend.sln'
-
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Setup .NET
+    - name: Checkout do código
+      uses: actions/checkout@v3
+
+    - name: Configurar .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
-    
-    - name: Restore dependencies
-      run: |
-        cd ${{ env.PROJECT_PATH }}
-        dotnet restore
-    
-    - name: Build
-      run: |
-        cd ${{ env.PROJECT_PATH }}
-        dotnet build --configuration Release --no-restore
-    
-    - name: Publish
-      run: |
-        cd ${{ env.PROJECT_PATH }}
-        dotnet publish --configuration Release --no-build --output ./publish
-    
-    - name: Upload artifact
+        dotnet-version: '7.0.x'  # Altere para a versão do .NET que você está usando
+
+    - name: Restaurar dependências
+      run: dotnet restore API/backend.sln
+
+    - name: Buildar solução
+      run: dotnet build API/backend.sln --configuration Release --no-restore
+
+    - name: Publicar aplicação
+      run: dotnet publish API/backend.sln --configuration Release --no-restore --output ./publish
+
+    - name: Fazer upload dos artefatos
       uses: actions/upload-artifact@v3
       with:
-        name: app
-        path: ${{ env.PROJECT_PATH }}/publish
+        name: app-publicada
+        path: ./publish
