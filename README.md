@@ -108,29 +108,39 @@ O projeto utiliza os seguintes padrões e práticas:
 
 ---
 
-## 💻 **Como Executar o Projeto Localmente**
+## 💻 **Como Executar o Projeto com Docker**
 
-### Passos para Clonar e Compilar
-1. Clone o repositório:
-   ```bash
-   git clone https://github.com/SEU-USUARIO/Teste-Dev-Fullstack-2-Backend.git
-   ```
-2. Entre no diretório do projeto:
-   ```bash
-   cd Teste-Dev-Fullstack-2-Backend
-   ```
-3. Restaure as dependências:
-   ```bash
-   dotnet restore
-   ```
-4. Compile o projeto:
-   ```bash
-   dotnet build
-   ```
-5. Execute o projeto:
-   ```bash
-   dotnet run --project API
-   ```
+### **Pré-requisitos**
+- Docker instalado em sua máquina.
+
+### **Passos**
+1. Clone o repositório:  
+   `git clone https://github.com/SEU-USUARIO/Teste-Dev-Fullstack-2-Backend.git`
+
+2. Navegue até o diretório do projeto:  
+   `cd Teste-Dev-Fullstack-2-Backend`
+
+3. Construa a imagem Docker:  
+   `docker build -t gerenciamento-backend .`
+
+4. Execute o container Docker:  
+   `docker run -d -p 5000:80 -p 5001:443 gerenciamento-backend`
+
+### **Acessar a API**
+- Após iniciar o container, acesse o Swagger UI para testar as rotas:
+  - **HTTP**: [http://localhost:5000/swagger](http://localhost:5000/swagger)
+  - **HTTPS**: [https://localhost:5001/swagger](https://localhost:5001/swagger)
+
+### **Banco de Dados com Docker**
+Caso você queira subir o SQL Server com Docker, pode usar o comando abaixo:  
+`docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=Your_password123" -p 1433:1433 --name sqlserver -d mcr.microsoft.com/mssql/server:2019-latest`
+
+Depois, configure a connection string no `appsettings.json` para apontar para o container:  
+`
+"ConnectionStrings": {  
+  "DefaultConnection": "Server=localhost,1433;Database=test_fullstack;User Id=sa;Password=Your_password123;TrustServerCertificate=True;"  
+}
+`
 
 ### Acessar a API
 - Assim que o projeto for compilado, será automaticamente redirecionado para o endpoint do swagger
