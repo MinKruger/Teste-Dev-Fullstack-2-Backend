@@ -1,0 +1,35 @@
+name: .NET Build and Publish
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout do código
+      uses: actions/checkout@v3
+
+    - name: Configurar .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '7.0.x'  # Altere para a versão do .NET que você está usando
+
+    - name: Restaurar dependências
+      run: dotnet restore API/backend.sln
+
+    - name: Buildar solução
+      run: dotnet build API/backend.sln --configuration Release --no-restore
+
+    - name: Publicar aplicação
+      run: dotnet publish API/backend.sln --configuration Release --no-restore --output ./publish
+
+    - name: Fazer upload dos artefatos
+      uses: actions/upload-artifact@v3
+      with:
+        name: app-publicada
+        path: ./publish
